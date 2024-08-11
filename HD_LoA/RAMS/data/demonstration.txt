@@ -1,0 +1,58 @@
+Your task is Event Argument Extraction. In this task, you will be provided with a document that describes an event and the goal is to extract the event arguments that correspond to each argument role associated with the event. The terminologies for this task is as follows:
+Event trigger: the main word that most clearly expresses an event occurrence, typically a verb or a noun. The trigger word is located between special tokens "<t>" and "<\t>" in the document, and only the event argument explicitly linked to the trigger word should be considered.
+Event argument: an entity mention, temporal expression or value that serves as a participant or attribute with a specific role in an event. Event arguments should be quoted exactly as they appear in the given document.
+Argument role: the relationship between an argument to the event in which it participates.
+Heuristics: serving as guiding rules for extracting event arguments.
+
+Specifically, you will use the heuristic provided in the heuristic list to guide identify event arguments, and re-evaluate the identified argument candidates to get the final answer.
+heuristic list:
+[
+Semantic Heuristic: [giver] is the person, group, or organization in the document that gives the grant or gift.
+Syntactic Heuristic: The [giver] may be recognized by analyzing sentence structure, often appearing before prepositional phrases starting with 'to' that introduce the recipient (e.g., "X gives Y to Z", X is the 'giver').
+Dependency Parsing Heuristic: In parsing the sentence structure, the [giver] is often connected through a dependency relation (e.g., 'nsubj' for nominal subject) to the main verb representing the giving action.
+]
+
+
+Example task:
+Question: Extract the event arguments of giver, beneficiary, and recipient in the "transaction.transaction.giftgrantprovideaid" event in the provided document, with the trigger word being "granted", highlighted between "<t>" and "</t>". When pinpointing each event argument, it's crucial to quote the entity exactly as it appears in the text. If an event argument is not explicitly mentioned or cannot be directly associated with the event indicated by the trigger word, please respond with "not specified".
+
+Document: a news document
+
+Trigger sentence: "The access to the research center in the city was <t>granted</t> by the administrator. The man, Ripley Johnson, earned it."
+
+Answer:
+Elaborate the meaning of event type and its argument roles:
+"transaction.transaction.giftgrantprovideaid": The event involves a transfer of money or resources in the form of a gift, grant, or provision of aid, signaled by the action of granting.
+[giver]: the giver is the person, group, or organization that provides or grants money, resources, or access in the event.
+[beneficiary]: the beneficiary is the party who ultimately benefits from the transaction.
+[recipient]: the recipient is the entity that receives the money, resources, or access granted in the event.
+
+Recognizing [giver] in the given document:
+Step 1: Select one or two heuristics in the heuristic list that are most suitable to identify the [giver] in the given document: Semantic Heuristic and Syntactic Heuristic.
+Step 2: Apply selected heuristics to identify [giver] independently.
+Step 2.1: Identify the [giver] based on Semantic Heuristic: "[giver] is the person, group, or organization that gives the grant or gift in the document". Applying this heuristic to the document, the entity that gives access of the research center is "administrator".
+Step 2.2: Identify the [giver] based on Syntactic Heuristic: "The [giver] may be recognized by analyzing sentence structure, often appearing before prepositional phrases starting with 'to' that introduce the recipient (e.g., 'X gives Y to Z', X is the 'giver')". Applying this heuristic to the given document, the entity that granted access to the research center is 'research center'.
+Step 3: Reevaluate argument candidates: ["administrator", "research center"]
+Is argument "administrator" alignment with the argument role [giver]? Yes, because "administrator" is directly responsible for the action of granting, establishing their role as the provider of access in the event.
+Is argument "research center" alignment with the argument role [giver]? No, because "research center" is the place that access has been granted to, but it doesn't give access.
+[giver]: "administrator"
+
+Recognizing [beneficiary] in the given document:
+Step 1: Select one or two heuristics in the heuristic list that are most suitable to identify the [beneficiary] in the given document: Semantic Heuristic.
+Step 2: Apply selected heuristics to identify [beneficiary] independently.
+Step 2.1: Identify the [beneficiary] based on Semantic Heuristic: "[beneficiary] is the entity that ultimately benefits from the gift or grant". Applying this heuristic to the given document, the entity that ultimately benefits from the grant is "not specified".
+Step 3: Reevaluate argument candidate: ["not specified"]
+Is argument "not specified" alignment with the argument role [beneficiary]? Yes, because the [beneficiary] is not explicitly mentioned so "not specified" is correct.
+[beneficiary]: "not specified"
+
+Recognizing [recipient] in the given document:
+Step 1: Select one or two heuristics in the heuristic list that are most suitable to identify the [recipient] in the given document: Semantic Heuristic and Dependency Parsing Heuristic.
+Step 2: Apply selected heuristics to identify [recipient] independently.
+Step 2.1: Identify the [recipient] based on Semantic Heuristic: "[recipient] is the entity that receives the gift or grant". Applying heuristic f1 to the given document, the entity that receives the gift or grant is "Ripley Johnson".
+Step 2.2: Identify the [recipient] based on Dependency Parsing Heuristic: "[recipient] is often highlighted in the sentence through a dependency relation that denotes the receiver of the action, such as 'dobj' (direct object) for direct transactions linked to the main verb of the event". Applying this heuristic to the given document, the entity connected to the verb 'granted' through a dobj relation is "Ripley Johnson".
+Step 3: Reevaluate argument candidate: ["Ripley Johnson"]
+Is argument "Ripley Johnson" alignment with the argument role [recipient]? Yes, because phrase "earned it" implies that "Ripley Johnson" was the intended recipient of the access, aligning with the role of [recipient] in the context of the event.
+[recipient]: "Ripley Johnson"
+
+
+Target task:

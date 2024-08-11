@@ -1,0 +1,59 @@
+Objective: Your task is Event Argument Extraction. In this task, you will be provided with a document that describes an event and the goal is to extract the event arguments that correspond to each argument role associated with the event. The terminologies for this task is as follows:
+Key Terminologies:
+Event argument: an entity mention, temporal expression or value that serves as a participant or attribute with a specific role in an event. Event arguments should be quoted exactly as the it appears in the given document.
+Argument role: the relationship between an argument to the event in which it participates.
+Heuristics: serving as guiding principles or strategies to aid the extraction of event arguments, tailored to specific argument roles.
+
+Specifically, you will adapt a set of given heuristics for identifying the argument role of 'giver' to other target argument roles, and then use these adapted heuristics to guide the extraction of target event arguments. Finally, re-evaluate the identified argument candidates to confirm if they are correct event arguments or not.
+Heuristic list:
+[
+Semantic Heuristic: [giver] is the person, group, or organization in the document that gives the grant or gift.
+Syntactic Heuristic: The [giver] may be recognized by analyzing sentence structure, often appearing before prepositional phrases starting with 'to' that introduce the recipient (e.g., "X gives Y to Z", X is the 'giver').
+Dependency Parsing Heuristic: In parsing the sentence structure, the [giver] is often connected through a dependency relation (e.g., 'nsubj' for nominal subject) to the main verb representing the giving action.
+]
+
+
+Example sample:
+Question: Extract the event arguments of 'Date', 'Casualties and Losses', 'Magnitude'， 'Number of Destroyed Building' in the 'Earthquakes' event in the provided news document. When pinpointing each event argument, it's crucial to quote the entity exactly as it appears in the text. Note that if an event argument is not explicitly mentioned or cannot be directly associated with its argument role in question, please respond with "not specified".
+
+Document:
+a news, the content is omitted here
+
+Answer:
+Elaborate the meaning of event type and its argument roles:
+'Earthquakes': The event involves the shaking of the surface of the Earth resulting from a sudden release of energy in the Earth's lithosphere.
+[Date]: the time when the earthquake occurred.
+[Casualties and Losses]: the number of people killed or injured, and the amount of economic losses caused by the earthquake.
+[Magnitude]: the measure of the size or intensity of the earthquake.
+[Number of Destroyed Building]: the number of buildings or structures that were damaged or destroyed due to the earthquake.
+
+Recognizing [Date] in the given document:
+Step 1 Select a heuristic in the heuristic list that is most suitable to identify the [Date] in the given document: Semantic Heuristic.
+Step 2 Identify the argument based on Semantic Heuristic: [Date] is the time when the earthquake occurred. Applying this heuristic to the document, the time when the earthquake occurred is "not specified".
+Step 3: reevaluate_argument_candidates:
+Is argument "not specified" alignment with the argument role [Date]? Yes, because [Date] is not explicitly mentioned in the document, so "not specified" is correct.
+[Date]: "not specified"
+
+Recognizing [Casualties and Losses] in the given document:
+Step 1 Select a heuristic in the heuristic list that is most suitable to identify the [Casualties and Losses] in the given document: Semantic Heuristic.
+Step 2 Identify the argument based on Semantic Heuristic: [Casualties and Losses] is the number of people killed or injured, and the amount of economic losses caused by the earthquake. Applying this heuristic to the document, the [Casualties and Losses] is "claimed 142 deaths" and "800 houses were damaged".
+Is argument "claimed 142 deaths" alignment with the argument role [Casualties and Losses]? Yes, because "claimed 142 deaths" provides details about the number of people killed due to the earthquake, aligning with the argument role [Casualties and Losses].
+Is argument "800 houses were damaged" alignment with the argument role [Casualties and Losses]? Yes, because it describes the extent of economic losses caused by the earthquake, aligning with the role of [Casualties and Losses].
+[Casualties and Losses]: "claimed 142 deaths", "800 houses were damaged"
+
+Recognizing [Magnitude] in the given document:
+Step 1 Select a heuristic in the heuristic list that is most suitable to identify the [Magnitude] in the given document: Semantic Heuristic.
+Step 2 Identify the argument based on Semantic Heuristic: [Magnitude] is the measure of the size or intensity of the earthquake. Applying this heuristic to the given document, the magnitude of the earthquake is "6.6".
+Step 3: reevaluate_argument_candidates:
+Is argument "6.6" alignment with the argument role [Magnitude]? Yes, because "The magnitude 6.6 shock" indicate the size of the earthquake.
+[Magnitude]: "6.6"
+
+Recognizing [Number of Destroyed Building] in the given document:
+Step 1 Select a heuristic in the heuristic list that is most suitable to identify the [Number of Destroyed Building] in the given document: Semantic Heuristic.
+Step 2 Identify the argument based on Semantic Heuristic: [Number of Destroyed Building] is the number of buildings or structures that were damaged or destroyed due to the earthquake. Applying this heuristic to the document, the number of buildings or structures that were destroyed due to the earthquake is "more than 80% of the houses".
+Step 3: reevaluate_argument_candidates:
+Is argument "more than 80% of the houses" alignment with the argument role [Number of Destroyed Building]? No, because the argument describes the percentage of destroyed buildings not the specific number of buildings destroyed.
+[Number of Destroyed Building]: "not specified"
+
+
+Target sample:
